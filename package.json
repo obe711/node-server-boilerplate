@@ -1,5 +1,5 @@
 {
-  "name": "opus-rest-server",
+  "name": "create-node-rest-server",
   "version": "0.0.1",
   "description": "Node server boilerplate",
   "bin": "bin/createNodejsApp.js",
