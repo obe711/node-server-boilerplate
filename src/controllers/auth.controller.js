@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const config = require('../config/config');
-const { authService, userService, tokenService, emailService } = require('../services');
+const { authService, userService, tokenService, emailService, cookieService } = require('../services');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -13,19 +13,19 @@ const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  setTokenCookie(res, tokens.refresh);
+  cookieService.setTokenCookie(res, tokens.refresh);
   res.send({ user, tokens });
 });
 
 const logout = catchAsync(async (req, res) => {
   await authService.logout(req.body.refreshToken);
-  expireTokenCookie(res);
+  cookieService.expireTokenCookie(res);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
 const refreshTokens = catchAsync(async (req, res) => {
   const tokens = await authService.refreshAuth(req.cookies[config.jwt.refreshCookieName] || req.body.refreshToken);
-  setTokenCookie(res, tokens.refresh);
+  cookieService.setTokenCookie(res, tokens.refresh);
   res.send({ ...tokens });
 });
 
@@ -51,7 +51,6 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-
 module.exports = {
   register,
   login,
@@ -62,19 +61,3 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
 };
-
-function setTokenCookie(res, tokenData) {
-  const { expires, token } = tokenData;
-  const cookieRefreshOptions = {
-    httpOnly: true,
-    expires: new Date(expires),
-  };
-  res.cookie(config.jwt.refreshCookieName, token, cookieRefreshOptions);
-}
-function expireTokenCookie(res) {
-  const expireCookieOptions = {
-    httpOnly: true,
-    expires: new Date(Date.now() - 60 * 1000 * 60 * 24 * 31),
-  };
-  res.cookie(config.jwt.refreshCookieName, 'x', expireCookieOptions);
-}
