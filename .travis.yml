@@ -6,7 +6,7 @@ services:
 cache: yarn
 branches:
   only:
-    - master
+    - main
 env:
   global:
     - PORT=3000
