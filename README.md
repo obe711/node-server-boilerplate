@@ -84,13 +84,13 @@ cp .env.example .env
 Running locally:
 
 ```bash
-yarn dev
+yarn start
 ```
 
 Running in production:
 
 ```bash
-yarn start
+yarn start:production
 ```
 
 Testing:

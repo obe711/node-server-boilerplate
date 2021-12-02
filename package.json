@@ -1,6 +1,6 @@
 {
   "name": "create-node-rest-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node server boilerplate",
   "bin": "bin/createNodejsApp.js",
   "main": "src/index.js",
@@ -12,6 +12,7 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon src/index.js",
+    "start:production": "pm2 start ecosystem.config.json",
     "test": "jest -i --colors --verbose --detectOpenHandles",
     "test:watch": "jest -i --watchAll",
     "coverage": "jest -i --coverage",
