@@ -99,7 +99,7 @@ async function setup() {
 
     console.log('We suggest that you start by typing:');
     console.log(`    cd ${folderName}`);
-    console.log(useYarn ? '    yarn dev' : '    npm run dev');
+    console.log(useYarn ? '    yarn start' : '    npm run start');
     console.log();
     console.log('Enjoy your production-ready Node.js app, which already supports a large number of ready-made features!');
     console.log('Check README.md for more info.');
