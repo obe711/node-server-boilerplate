@@ -42,12 +42,15 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - firstName
+ *               - lastName
  *               - email
  *               - password
  *               - role
  *             properties:
- *               name:
+ *               firstName:
+ *                 type: string
+ *               lastName:
  *                 type: string
  *               email:
  *                 type: string
@@ -62,7 +65,8 @@ module.exports = router;
  *                  type: string
  *                  enum: [user, admin]
  *             example:
- *               name: fake name
+ *               firstName: fake
+ *               lastName: name
  *               email: fake@example.com
  *               password: password1
  *               role: user
@@ -88,10 +92,15 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: name
+ *         name: firstName
  *         schema:
  *           type: string
- *         description: User name
+ *         description: User first name
+ *       - in: query
+ *         name: lastName
+ *         schema:
+ *           type: string
+ *         description: User last name
  *       - in: query
  *         name: role
  *         schema:
@@ -196,7 +205,9 @@ module.exports = router;
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               firstName:
+ *                 type: string
+ *               lastName:
  *                 type: string
  *               email:
  *                 type: string
@@ -208,7 +219,8 @@ module.exports = router;
  *                 minLength: 8
  *                 description: At least one number and one letter
  *             example:
- *               name: fake name
+ *               firstName: fake
+ *               lastName: name
  *               email: fake@example.com
  *               password: password1
  *     responses:
