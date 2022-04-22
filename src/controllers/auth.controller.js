@@ -1,7 +1,15 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const config = require('../config/config');
-const { authService, userService, tokenService, emailService, cookieService } = require('../services');
+const { 
+  authService, 
+  userService, 
+  tokenService, 
+  emailService, 
+  cookieService, 
+  appleService, 
+  googleService 
+} = require('../services');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -9,9 +17,25 @@ const register = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
-const login = catchAsync(async (req, res) => {
+const loginEmail = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
+  const tokens = await tokenService.generateAuthTokens(user);
+  cookieService.setTokenCookie(res, tokens.refresh);
+  res.send({ user, tokens });
+});
+
+// loginGoogle
+const loginGoogle = catchAsync(async (req, res) => {
+  const user = await googleService.verifyOAuthToken(req.body.token);
+  const tokens = await tokenService.generateAuthTokens(user);
+  cookieService.setTokenCookie(res, tokens.refresh);
+  res.send({ user, tokens });
+});
+
+// loginApple
+const loginApple = catchAsync(async (req, res) => {
+  const user = await appleService.verifyOAuthToken(req.body.token);
   const tokens = await tokenService.generateAuthTokens(user);
   cookieService.setTokenCookie(res, tokens.refresh);
   res.send({ user, tokens });
@@ -53,7 +77,9 @@ const verifyEmail = catchAsync(async (req, res) => {
 
 module.exports = {
   register,
-  login,
+  loginEmail,
+  loginApple,
+  loginGoogle,
   logout,
   refreshTokens,
   forgotPassword,

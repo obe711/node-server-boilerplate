@@ -17,6 +17,15 @@ const login = {
   }),
 };
 
+const oauthLogin = {
+  params: Joi.object().keys({
+    oauth: Joi.string().allow('google', 'apple'),
+  }),
+  body: Joi.object().keys({
+    token: Joi.string().required(),
+  }),
+};
+
 const logout = {
   body: Joi.object().keys({
     refreshToken: Joi.string().required(),
@@ -53,6 +62,7 @@ const verifyEmail = {
 module.exports = {
   register,
   login,
+  oauthLogin,
   logout,
   refreshTokens,
   forgotPassword,

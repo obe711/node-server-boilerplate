@@ -61,6 +61,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.7.7",
     "morgan": "^1.9.1",
+    "node-rsa": "^1.1.1",
     "nodemailer": "^6.3.1",
     "openapi-to-postmanv2": "^2.12.0",
     "passport": "^0.4.0",
