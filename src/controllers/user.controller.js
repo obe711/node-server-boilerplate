@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { userService } = require('../services');
 
 const createUser = catchAsync(async (req, res) => {
+  Object.assign(req.body, { authType: 'email' });
   const user = await userService.createUser(req.body);
   res.status(httpStatus.CREATED).send(user);
 });

@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
+const authTypes = require('../config/authTypes');
 
 const userSchema = mongoose.Schema(
   {
@@ -30,7 +31,7 @@ const userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true, TODO: do we need this?
       trim: true,
       minlength: 8,
       validate(value) {
@@ -39,6 +40,12 @@ const userSchema = mongoose.Schema(
         }
       },
       private: true, // used by the toJSON plugin
+    },
+    authType: {
+      type: String,
+      required: true,
+      enum: authTypes,
+      private: true,
     },
     role: {
       type: String,

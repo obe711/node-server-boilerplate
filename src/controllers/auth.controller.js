@@ -1,17 +1,42 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const config = require('../config/config');
-const { authService, userService, tokenService, emailService, cookieService } = require('../services');
+const {
+  authService,
+  userService,
+  tokenService,
+  emailService,
+  cookieService,
+  appleService,
+  googleService,
+} = require('../services');
 
 const register = catchAsync(async (req, res) => {
+  Object.assign(req.body, { authType: 'email' });
   const user = await userService.createUser(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
-const login = catchAsync(async (req, res) => {
+const loginEmail = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
+  const tokens = await tokenService.generateAuthTokens(user);
+  cookieService.setTokenCookie(res, tokens.refresh);
+  res.send({ user, tokens });
+});
+
+// loginGoogle
+const loginGoogle = catchAsync(async (req, res) => {
+  const user = await googleService.verifyOAuthToken(req.body.token);
+  const tokens = await tokenService.generateAuthTokens(user);
+  cookieService.setTokenCookie(res, tokens.refresh);
+  res.send({ user, tokens });
+});
+
+// loginApple
+const loginApple = catchAsync(async (req, res) => {
+  const user = await appleService.verifyOAuthToken(req.body.token);
   const tokens = await tokenService.generateAuthTokens(user);
   cookieService.setTokenCookie(res, tokens.refresh);
   res.send({ user, tokens });
@@ -24,9 +49,9 @@ const logout = catchAsync(async (req, res) => {
 });
 
 const refreshTokens = catchAsync(async (req, res) => {
-  const tokens = await authService.refreshAuth(req.cookies[config.jwt.refreshCookieName] || req.body.refreshToken);
+  const { user, tokens } = await authService.refreshAuth(req.cookies[config.jwt.refreshCookieName] || req.body.refreshToken);
   cookieService.setTokenCookie(res, tokens.refresh);
-  res.send({ ...tokens });
+  res.send({ user, tokens });
 });
 
 const forgotPassword = catchAsync(async (req, res) => {
@@ -53,7 +78,9 @@ const verifyEmail = catchAsync(async (req, res) => {
 
 module.exports = {
   register,
-  login,
+  loginEmail,
+  loginApple,
+  loginGoogle,
   logout,
   refreshTokens,
   forgotPassword,
