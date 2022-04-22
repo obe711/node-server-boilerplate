@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
+const authTypes = require('../config/authTypes');
 
 const userSchema = mongoose.Schema(
   {
@@ -40,7 +41,7 @@ const userSchema = mongoose.Schema(
       },
       private: true, // used by the toJSON plugin
     },
-    oauth: {
+    authType: {
       type: String,
       required: true,
       enum: authTypes,

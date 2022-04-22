@@ -90,7 +90,7 @@ describe('Auth routes', () => {
     });
   });
 
-  describe('POST /v1/auth/login', () => {
+  describe('POST /v1/auth/login/email', () => {
     test('should return 200 and login user if email and password match', async () => {
       await insertUsers([userOne]);
       const loginCredentials = {
@@ -98,7 +98,7 @@ describe('Auth routes', () => {
         password: userOne.password,
       };
 
-      const res = await request(app).post('/v1/auth/login').send(loginCredentials).expect(httpStatus.OK);
+      const res = await request(app).post('/v1/auth/login/email').send(loginCredentials).expect(httpStatus.OK);
 
       expect(res.body.user).toEqual({
         id: expect.anything(),
@@ -121,7 +121,7 @@ describe('Auth routes', () => {
         password: userOne.password,
       };
 
-      const res = await request(app).post('/v1/auth/login').send(loginCredentials).expect(httpStatus.UNAUTHORIZED);
+      const res = await request(app).post('/v1/auth/login/email').send(loginCredentials).expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body).toEqual({ code: httpStatus.UNAUTHORIZED, message: 'Incorrect email or password' });
     });
@@ -133,7 +133,7 @@ describe('Auth routes', () => {
         password: 'wrongPassword1',
       };
 
-      const res = await request(app).post('/v1/auth/login').send(loginCredentials).expect(httpStatus.UNAUTHORIZED);
+      const res = await request(app).post('/v1/auth/login/email').send(loginCredentials).expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body).toEqual({ code: httpStatus.UNAUTHORIZED, message: 'Incorrect email or password' });
     });
@@ -183,12 +183,12 @@ describe('Auth routes', () => {
 
       const res = await request(app).post('/v1/auth/refresh-tokens').send({ refreshToken }).expect(httpStatus.OK);
 
-      expect(res.body).toEqual({
+      expect(res.body.tokens).toEqual({
         access: { token: expect.anything(), expires: expect.anything() },
         refresh: { token: expect.anything(), expires: expect.anything() },
       });
 
-      const dbRefreshTokenDoc = await Token.findOne({ token: res.body.refresh.token });
+      const dbRefreshTokenDoc = await Token.findOne({ token: res.body.tokens.refresh.token });
       expect(dbRefreshTokenDoc).toMatchObject({ type: tokenTypes.REFRESH, user: userOne._id, blacklisted: false });
 
       const dbRefreshTokenCount = await Token.countDocuments();

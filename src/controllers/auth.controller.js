@@ -1,17 +1,18 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const config = require('../config/config');
-const { 
-  authService, 
-  userService, 
-  tokenService, 
-  emailService, 
-  cookieService, 
-  appleService, 
-  googleService 
+const {
+  authService,
+  userService,
+  tokenService,
+  emailService,
+  cookieService,
+  appleService,
+  googleService,
 } = require('../services');
 
 const register = catchAsync(async (req, res) => {
+  Object.assign(req.body, { authType: 'email' });
   const user = await userService.createUser(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
@@ -48,9 +49,9 @@ const logout = catchAsync(async (req, res) => {
 });
 
 const refreshTokens = catchAsync(async (req, res) => {
-  const tokens = await authService.refreshAuth(req.cookies[config.jwt.refreshCookieName] || req.body.refreshToken);
+  const { user, tokens } = await authService.refreshAuth(req.cookies[config.jwt.refreshCookieName] || req.body.refreshToken);
   cookieService.setTokenCookie(res, tokens.refresh);
-  res.send({ ...tokens });
+  res.send({ user, tokens });
 });
 
 const forgotPassword = catchAsync(async (req, res) => {

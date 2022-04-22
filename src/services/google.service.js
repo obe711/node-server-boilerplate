@@ -27,13 +27,13 @@ const verifyOAuthToken = async (token) => {
         firstName: payload.given_name,
         lastName: payload.family_name,
         email: payload.email,
-        oauth: 'google',
+        authType: 'google',
         role: 'user',
       });
 
       return newUser;
     }
-    if (user.oauth !== 'google') throw Error('Not google user');
+    if (user.authType !== 'google') throw Error('Not google user');
     return user;
   } catch (ex) {
     logger.info(JSON.stringify(ex, null, 2));

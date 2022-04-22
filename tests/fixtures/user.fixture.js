@@ -15,6 +15,7 @@ const userOne = {
   password,
   role: 'user',
   isEmailVerified: false,
+  authType: 'email',
 };
 
 const userTwo = {
@@ -25,6 +26,7 @@ const userTwo = {
   password,
   role: 'user',
   isEmailVerified: false,
+  authType: 'email',
 };
 
 const admin = {
@@ -35,6 +37,7 @@ const admin = {
   password,
   role: 'admin',
   isEmailVerified: false,
+  authType: 'email',
 };
 
 const insertUsers = async (users) => {
