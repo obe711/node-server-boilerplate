@@ -17,9 +17,10 @@ const paginate = (schema) => {
    * @param {string} [options.populate] - Populate data fields. Hierarchy of fields should be separated by (.). Multiple populating criteria should be separated by commas (,)
    * @param {number} [options.limit] - Maximum number of results per page (default = 10)
    * @param {number} [options.page] - Current page (default = 1)
+   * @param {string} [search] - Search for a string in the fields specified in the searchableFields property
    * @returns {Promise<QueryResult>}
    */
-  schema.statics.paginate = async function (filter, options) {
+  schema.statics.paginate = async function (filter, options, search) {
     let sort = '';
     if (options.sortBy) {
       const sortingCriteria = [];
@@ -36,8 +37,19 @@ const paginate = (schema) => {
     const page = options.page && parseInt(options.page, 10) > 0 ? parseInt(options.page, 10) : 1;
     const skip = (page - 1) * limit;
 
-    const countPromise = this.countDocuments(filter).exec();
-    let docsPromise = this.find(filter).sort(sort).skip(skip).limit(limit);
+    // Global Search
+    const searchFilter = [...this.searchableFields()].map((field) => {
+      return {
+        [field]: { $regex: search, $options: 'i' },
+      };
+    });
+    const searchQuery = search ? { $or: searchFilter } : {};
+
+    const countPromise = this.countDocuments({ ...filter, ...searchQuery }).exec();
+    let docsPromise = this.find({ ...filter, ...searchQuery })
+      .sort(sort)
+      .skip(skip)
+      .limit(limit);
 
     if (options.populate) {
       options.populate.split(',').forEach((populateOption) => {

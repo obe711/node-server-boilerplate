@@ -16,6 +16,11 @@ projectSchema.virtual('tasks', {
 });
 
 projectSchema.plugin(paginate);
+
+projectSchema.statics.searchableFields = function () {
+  return ['name'];
+};
+
 const Project = mongoose.model('Project', projectSchema);
 
 const taskSchema = mongoose.Schema({
@@ -31,6 +36,11 @@ const taskSchema = mongoose.Schema({
 });
 
 taskSchema.plugin(paginate);
+
+taskSchema.statics.searchableFields = function () {
+  return ['name'];
+};
+
 const Task = mongoose.model('Task', taskSchema);
 
 setupTestDB();

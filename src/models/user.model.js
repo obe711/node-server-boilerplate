@@ -67,6 +67,14 @@ userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
 
 /**
+ * Return paths to text search in paginate plugin
+ * @returns {Array<string>}
+ */
+userSchema.statics.searchableFields = function () {
+  return ['firstName', 'lastName', 'email'];
+};
+
+/**
  * Check if email is taken
  * @param {string} email - The user's email
  * @param {ObjectId} [excludeUserId] - The id of the user to be excluded

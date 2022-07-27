@@ -82,7 +82,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /auth/login:
+ * /auth/login/email:
  *   post:
  *     summary: Login
  *     tags: [Auth]
