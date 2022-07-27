@@ -181,7 +181,9 @@ List of available routes:
 
 **Auth routes**:\
 `POST /v1/auth/register` - register\
-`POST /v1/auth/login` - login\
+`POST /v1/auth/login/email` - login w/ email\
+`POST /v1/auth/login/apple` - login w/ Apple\
+`POST /v1/auth/login/google` - login w/ Google\
 `POST /v1/auth/refresh-tokens` - refresh auth tokens\
 `POST /v1/auth/forgot-password` - send reset password email\
 `POST /v1/auth/reset-password` - reset password\
@@ -363,8 +365,8 @@ The paginate plugin adds the `paginate` static method to the mongoose schema.
 Adding this plugin to the `User` model schema will allow you to do the following:
 
 ```javascript
-const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
+const queryUsers = async (filter, options, search) => {
+  const users = await User.paginate(filter, options, search);
   return users;
 };
 ```
@@ -375,6 +377,7 @@ The `options` param can have the following (optional) fields:
 
 ```javascript
 const options = {
+  search: 'bob', // search for users with firstName, lastName or email containing 'bob'
   sortBy: 'name:desc', // sort order
   limit: 5, // maximum results per page
   page: 2, // page number
@@ -410,5 +413,3 @@ To maintain a consistent coding style across different IDEs, the project contain
 ## Contributing
 
 Contributions are more than welcome! Please check out the [contributing guide](CONTRIBUTING.md).
-
-
