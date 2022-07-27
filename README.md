@@ -348,6 +348,10 @@ const userSchema = mongoose.Schema(
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
 
+userSchema.statics.searchableFields = function () {
+  return ['firstName', 'lastName', 'email'];
+};
+
 const User = mongoose.model('User', userSchema);
 ```
 
