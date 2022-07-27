@@ -37,7 +37,7 @@ const getAppleUserId = async (token) => {
   });
 };
 
-const verifyOAuthToken = async (token) => {
+const verifyOAuthToken = async (token, firstName, lastName) => {
   try {
     const user = await getAppleUserId(token);
     logger.info(JSON.stringify({ id: 'apple data', user }, null, 2));
@@ -45,8 +45,8 @@ const verifyOAuthToken = async (token) => {
     const foundUser = await userService.getUserByEmail(user.email);
     if (!foundUser) {
       const newUser = await userService.createUser({
-        firstName: user.fullName?.givenName,
-        lastName: user.fullName?.familyName,
+        firstName,
+        lastName,
         email: user.email,
         authType: 'apple',
         role: 'user',

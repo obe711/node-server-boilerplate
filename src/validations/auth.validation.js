@@ -22,6 +22,8 @@ const oauthLogin = {
     oauth: Joi.string().allow('google', 'apple'),
   }),
   body: Joi.object().keys({
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     token: Joi.string().required(),
   }),
 };
