@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const config = require('../../src/config/config');
 const wordsArray = require('./profane.json');
 const { Profane } = require('../../src/models');
-/* const Profane = require('../../src/models/profane.model.js'); */
+
 const logger = require('../../src/config/logger');
 
 mongoose.connect(config.mongoose.url, {
