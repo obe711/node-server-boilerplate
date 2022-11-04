@@ -11,6 +11,8 @@
     "node": ">=12.0.0"
   },
   "scripts": {
+    "docker:dev:start": "docker-compose up -d",
+    "docker:dev:stop": "docker-compose down",
     "start": "cross-env NODE_ENV=development nodemon src/index.js",
     "start:production": "pm2 start ecosystem.config.json",
     "test": "jest -i --colors --verbose --detectOpenHandles",
