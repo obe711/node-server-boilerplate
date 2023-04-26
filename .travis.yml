@@ -1,6 +1,7 @@
 language: node_js
+dist: focal
 node_js:
-  - '12'
+  - '18'
 services:
   - mongodb
 cache: yarn
@@ -15,6 +16,7 @@ env:
     - JWT_ACCESS_EXPIRATION_MINUTES=30
     - JWT_REFRESH_EXPIRATION_DAYS=30
     - JWT_REFRESH_COOKIE=refreshCookie
+    - MONGODB_ACCESS_LOG_URL=mongodb://localhost:27017/mt-live-access
 script:
   - yarn lint
   - yarn test
