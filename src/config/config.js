@@ -26,6 +26,7 @@ const envVarsSchema = Joi.object()
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
     GOOGLE_CLIENT_ID: Joi.string().description('Google Client ID for Oauth2'),
     GOOGLE_CLIENT_SECRET: Joi.string().description('Google Client Secret for Oauth2'),
+    AUTH_STRICT_MODE: Joi.bool().description('Allow users to login from multi auth sources'),
   })
   .unknown();
 
@@ -66,6 +67,7 @@ module.exports = {
     from: envVars.EMAIL_FROM,
   },
   oauth: {
+    strictMode: envVars.AUTH_STRICT_MODE,
     google: {
       client_id: envVars.GOOGLE_CLIENT_ID,
       client_secret: envVars.GOOGLE_CLIENT_SECRET,

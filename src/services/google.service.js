@@ -33,7 +33,7 @@ const verifyOAuthToken = async (token) => {
 
       return newUser;
     }
-    if (user.authType !== 'google') throw Error('Not google user');
+    if (config.oauth.strictMode && user.authType !== 'google') throw Error('Not google user');
     return user;
   } catch (ex) {
     logger.info(JSON.stringify(ex, null, 2));

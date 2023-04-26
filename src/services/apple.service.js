@@ -5,6 +5,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const ApiError = require('../utils/ApiError');
 const userService = require('./user.service');
 const logger = require('../config/logger');
+const config = require('../config/config');
 
 const _getApplePublicKeys = async () => {
   return axios
@@ -45,15 +46,15 @@ const verifyOAuthToken = async (token, firstName, lastName) => {
     const foundUser = await userService.getUserByEmail(user.email);
     if (!foundUser) {
       const newUser = await userService.createUser({
-        firstName,
-        lastName,
+        firstName: !firstName ? 'n/a' : firstName,
+        lastName: !lastName ? 'n/a' : lastName,
         email: user.email,
         authType: 'apple',
         role: 'user',
       });
       return newUser;
     }
-    if (foundUser.authType !== 'apple') throw Error('Not apple user');
+    if (config.oauth.strictMode && foundUser.authType !== 'apple') throw Error('Not apple user');
     return foundUser;
   } catch (ex) {
     logger.info(JSON.stringify(ex, null, 2));
