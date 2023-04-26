@@ -87,6 +87,14 @@ Running locally:
 yarn start
 ```
 
+Running locally with Docker: </br>
+_(requires Docker Desktop (macOS) or Docker SystemD service (Linux) to already be running)_
+
+```bash
+yarn docker:dev:start # to stop use `yarn docker:dev:stop`
+yarn start
+```
+
 Running in production:
 
 ```bash
