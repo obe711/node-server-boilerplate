@@ -27,6 +27,12 @@ const envVarsSchema = Joi.object()
     GOOGLE_CLIENT_ID: Joi.string().description('Google Client ID for Oauth2'),
     GOOGLE_CLIENT_SECRET: Joi.string().description('Google Client Secret for Oauth2'),
     AUTH_STRICT_MODE: Joi.bool().description('Allow users to login from multi auth sources'),
+    API_NAME: Joi.string().description('Swagger Docs API title'),
+    APPLE_KEYID: Joi.string().description('Apple key ID for Sign In with Apple'),
+    APPLE_CLIENT_ID: Joi.string().description('Apple bundle ID'),
+    APPLE_TEAM_ID: Joi.string().description('Apple developer team ID'),
+    APPLE_PRIVATE_KEY_FILE: Joi.string().description('File name of key file in ./.keys directory'),
+    APPLE_REFRESH_COOKIE: Joi.string().description('Name of Apple refresh token cookie'),
   })
   .unknown();
 
@@ -59,6 +65,7 @@ module.exports = {
         user: envVars.SMTP_USERNAME,
         pass: envVars.SMTP_PASSWORD,
       },
+      tls: { rejectUnauthorized: false },
     },
     from: envVars.EMAIL_FROM,
   },
@@ -68,5 +75,15 @@ module.exports = {
       client_id: envVars.GOOGLE_CLIENT_ID,
       client_secret: envVars.GOOGLE_CLIENT_SECRET,
     },
+    apple: {
+      keyId: envVars.APPLE_KEYID,
+      client_id: envVars.APPLE_CLIENT_ID,
+      teamId: envVars.APPLE_TEAM_ID,
+      key_filename: envVars.APPLE_PRIVATE_KEY_FILE,
+      refreshCookieName: envVars.APPLE_REFRESH_COOKIE,
+    },
+  },
+  swagger: {
+    title: envVars.API_NAME,
   },
 };

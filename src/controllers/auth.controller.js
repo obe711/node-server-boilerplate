@@ -36,10 +36,24 @@ const loginGoogle = catchAsync(async (req, res) => {
 
 // loginApple
 const loginApple = catchAsync(async (req, res) => {
-  const user = await appleService.verifyOAuthToken(req.body.token);
+  const { token, firstName, lastName, code } = req.body;
+  const user = await appleService.verifyOAuthToken(token, firstName, lastName);
+  const appleAuthTokens = await appleService.generateAppleAuthTokens(code);
+  cookieService.setAppleTokenCookie(res, appleAuthTokens.refresh_token);
+  await tokenService.clearUserTokens(user.id);
   const tokens = await tokenService.generateAuthTokens(user);
   cookieService.setTokenCookie(res, tokens.refresh);
   res.send({ user, tokens });
+});
+
+// Revoke Apple auth tokens
+const revokeApple = catchAsync(async (req, res) => {
+  const appleRefreshToken = req.cookies[config.oauth.apple.refreshCookieName];
+  if (!appleRefreshToken) {
+    res.status(httpStatus.NO_CONTENT).send();
+  }
+  await appleService.revokeAppleTokens(appleRefreshToken);
+  res.status(httpStatus.NO_CONTENT).send();
 });
 
 const logout = catchAsync(async (req, res) => {
@@ -80,6 +94,7 @@ module.exports = {
   register,
   loginEmail,
   loginApple,
+  revokeApple,
   loginGoogle,
   logout,
   refreshTokens,

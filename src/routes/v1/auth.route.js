@@ -9,6 +9,7 @@ const router = express.Router();
 router.post('/register', validate(authValidation.register), authController.register);
 router.post('/login/google', validate(authValidation.oauthLogin), authController.loginGoogle);
 router.post('/login/apple', validate(authValidation.oauthLogin), authController.loginApple);
+router.get('/revoke/apple', validate(authValidation.refreshTokens), authController.revokeApple);
 
 // TODO: Change to /login/email
 router.post('/login/email', validate(authValidation.login), authController.loginEmail);
