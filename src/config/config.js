@@ -32,6 +32,7 @@ const envVarsSchema = Joi.object()
     APPLE_CLIENT_ID: Joi.string().description('Apple bundle ID'),
     APPLE_TEAM_ID: Joi.string().description('Apple developer team ID'),
     APPLE_PRIVATE_KEY_FILE: Joi.string().description('File name of key file in ./.keys directory'),
+    APPLE_REFRESH_COOKIE: Joi.string().description('Name of Apple refresh token cookie'),
   })
   .unknown();
 
@@ -79,6 +80,7 @@ module.exports = {
       client_id: envVars.APPLE_CLIENT_ID,
       teamId: envVars.APPLE_TEAM_ID,
       key_filename: envVars.APPLE_PRIVATE_KEY_FILE,
+      refreshCookieName: envVars.APPLE_REFRESH_COOKIE,
     },
   },
   swagger: {

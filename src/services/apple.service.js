@@ -2,6 +2,9 @@ const httpStatus = require('http-status');
 const axios = require('axios');
 const NodeRSA = require('node-rsa');
 const jsonwebtoken = require('jsonwebtoken');
+const fs = require('node:fs');
+const path = require('node:path');
+const url = require('node:url');
 const ApiError = require('../utils/ApiError');
 const userService = require('./user.service');
 const logger = require('../config/logger');
@@ -14,6 +17,38 @@ const _getApplePublicKeys = async () => {
       url: 'https://appleid.apple.com/auth/keys',
     })
     .then((response) => response.data.keys);
+};
+
+const createClientSecret = async () => {
+  const privateKey = fs.readFileSync(path.join(process.cwd(), '.keys', config.oauth.apple.key_filename));
+  const payload = {
+    iss: config.oauth.apple.teamId,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 14777000,
+    aud: 'https://appleid.apple.com',
+    sub: config.oauth.apple.client_id,
+  };
+  const token = await jsonwebtoken.sign(payload, privateKey, { algorithm: 'ES256', keyid: config.oauth.apple.keyId });
+  return token;
+};
+
+const revokeAppleTokens = async (token) => {
+  const clientSecret = await createClientSecret();
+  const params = new url.URLSearchParams({ client_id: config.oauth.apple.client_id, client_secret: clientSecret, token });
+  const res = await axios.post('https://appleid.apple.com/auth/revoke/', params.toString());
+  return res.data;
+};
+
+const generateAppleAuthTokens = async (code) => {
+  const clientSecret = await createClientSecret();
+  const params = new url.URLSearchParams({
+    client_id: config.oauth.apple.client_id,
+    client_secret: clientSecret,
+    code,
+    grant_type: 'authorization_code',
+  });
+  const res = await axios.post('https://appleid.apple.com/auth/token/', params.toString());
+  return res.data;
 };
 
 const getAppleUserId = async (token) => {
@@ -64,4 +99,6 @@ const verifyOAuthToken = async (token, firstName, lastName) => {
 
 module.exports = {
   verifyOAuthToken,
+  generateAppleAuthTokens,
+  revokeAppleTokens,
 };

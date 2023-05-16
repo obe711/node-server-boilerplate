@@ -113,6 +113,24 @@ const generateVerifyEmailToken = async (user) => {
   return verifyEmailToken;
 };
 
+/**
+ * Clear user tokens
+ * @param {ObjectId} userId
+ * @returns {Promise<Token>}
+ */
+const clearUserTokens = async (userId) => {
+  await Token.deleteMany({ user: userId });
+};
+
+/**
+ * Delete token by id
+ * @param {ObjectId || string} id
+ * @returns
+ */
+const deleteTokenById = (id) => {
+  return Token.findByIdAndDelete(id);
+};
+
 module.exports = {
   generateToken,
   saveToken,
@@ -120,4 +138,6 @@ module.exports = {
   generateAuthTokens,
   generateResetPasswordToken,
   generateVerifyEmailToken,
+  clearUserTokens,
+  deleteTokenById,
 };
