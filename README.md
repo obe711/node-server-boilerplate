@@ -26,6 +26,12 @@ cd node-server-boilerplate
 npx rimraf ./.git
 ```
 
+Node.js version:
+
+```bash
+nvm use
+```
+
 Install the dependencies:
 
 ```bash
