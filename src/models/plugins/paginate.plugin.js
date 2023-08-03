@@ -46,7 +46,7 @@ const paginate = (schema) => {
       Object.assign(filter, {
         createdAt: {
           ...filter.createdAt,
-          $lt: new Date(parseInt(filter.endDate, 10)).setDate(new Date(parseInt(filter.endDate, 10)).getDate() + 1),
+          $lt: new Date(new Date(parseInt(filter.endDate, 10)).setDate(new Date(parseInt(filter.endDate, 10)).getDate() + 1)),
         },
       });
       delete filter.endDate;
