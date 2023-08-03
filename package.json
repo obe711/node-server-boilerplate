@@ -1,6 +1,6 @@
 {
   "name": "create-node-rest-server",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Node server boilerplate",
   "bin": "bin/createNodejsApp.js",
   "main": "src/index.js",
