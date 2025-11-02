@@ -36,3 +36,11 @@ process.on('SIGTERM', () => {
     server.close();
   }
 });
+
+process.on('SIGINT', async () => {
+  logger.warn('Server closed through app termination');
+  if (server) {
+    server.close();
+  }
+  process.exit(0);
+});
