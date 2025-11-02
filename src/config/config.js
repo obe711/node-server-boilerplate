@@ -1,5 +1,9 @@
+const dotenv = require('dotenv');
+const path = require('node:path');
 const Joi = require('joi');
 const pkgJson = require('../../package.json');
+
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const envVarsSchema = Joi.object()
   .keys({

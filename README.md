@@ -1,6 +1,7 @@
 # RESTful API Node Server Boilerplate
 
-[![Build Status](https://app.travis-ci.com/obe711/node-server-boilerplate.svg?branch=main)](https://app.travis-ci.com/obe711/node-server-boilerplate)
+[![CI](https://github.com/obe711/node-server-boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/obe711/node-server-boilerplate/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/obe711/node-server-boilerplate/badge.svg?branch=main)](https://coveralls.io/github/obe711/node-server-boilerplate?branch=main)
 
 A boilerplate/starter project for quickly building RESTful APIs using Node.js, Express, and Mongoose.
 
@@ -78,7 +79,7 @@ cp .env.example .env
 - **Santizing**: sanitize request data against xss and query injection
 - **CORS**: Cross-Origin Resource-Sharing enabled using [cors](https://github.com/expressjs/cors)
 - **Compression**: gzip compression with [compression](https://github.com/expressjs/compression)
-- **CI**: continuous integration with [Travis CI](https://travis-ci.org)
+- **CI**: continuous integration with [GitHub Actions](https://github.com/features/actions)
 - **Code coverage**: using [coveralls](https://coveralls.io)
 - **Code quality**: with [Codacy](https://www.codacy.com)
 - **Git hooks**: with [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged)
