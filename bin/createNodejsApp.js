@@ -33,7 +33,7 @@ if (process.argv.length < 3) {
   console.log('For example:');
   console.log('    npx create-node-rest-server my-app');
   console.log('    OR');
-  console.log('    npm init node-rest-server my-app');
+  console.log('    npm init create-node-rest-server my-app');
   process.exit(1);
 }
 

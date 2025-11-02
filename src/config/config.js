@@ -1,8 +1,5 @@
-const dotenv = require('dotenv');
-const path = require('path');
 const Joi = require('joi');
-
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+const pkgJson = require('../../package.json');
 
 const envVarsSchema = Joi.object()
   .keys({
@@ -43,6 +40,7 @@ if (error) {
 }
 
 module.exports = {
+  version: pkgJson.version,
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   mongoose: {
